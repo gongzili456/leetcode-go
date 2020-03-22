@@ -12,18 +12,15 @@ func main() {
 }
 
 func createTargetArray(nums []int, index []int) []int {
-	target := make([]int, 0)
+	target := make([]int, len(nums))
 
 	var add func(i, n int)
 	add = func(i, n int) {
 		// 后移
-		t := make([]int, 0)
-		af := target[i:]
-		bf := target[:i]
-		t = append(t, bf...)
-		t = append(t, n)
-		t = append(t, af...)
-		target = t
+		for x := len(target) - 1; x > i; x-- {
+			target[x] = target[x-1]
+		}
+		target[i] = n
 	}
 
 	for i, v := range index {
@@ -32,3 +29,25 @@ func createTargetArray(nums []int, index []int) []int {
 
 	return target
 }
+
+// func createTargetArray(nums []int, index []int) []int {
+// 	target := make([]int, 0)
+
+// 	var add func(i, n int)
+// 	add = func(i, n int) {
+// 		// 后移
+// 		t := make([]int, 0)
+// 		af := target[i:]
+// 		bf := target[:i]
+// 		t = append(t, bf...)
+// 		t = append(t, n)
+// 		t = append(t, af...)
+// 		target = t
+// 	}
+
+// 	for i, v := range index {
+// 		add(v, nums[i])
+// 	}
+
+// 	return target
+// }
