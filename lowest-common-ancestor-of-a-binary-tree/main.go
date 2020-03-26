@@ -30,35 +30,38 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+// 深度搜索，如果一个节点的所有子节点（含节点本身）包含所有目标节点，那么该节点就是最近公共祖先
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
-
+	// 给每个节点分配权重，搜索目标节点是1，其余为0，
+	// 深度搜索，将权重的和返回上层，如果权重和 >=2 则发现公共祖先节点
 	var ans *TreeNode
 	var search func(r *TreeNode) bool
-
-	search = func(r *TreeNode) bool {
-		if r == nil {
+	search = func(node *TreeNode) bool {
+		if ans != nil {
 			return false
 		}
 
-		var self, left, right int
-
-		if l := search(r.Left); l {
-			left = 1
+		if node == nil {
+			return false
 		}
 
-		if r := search(r.Right); r {
-			right = 1
+		var l, r, c int
+
+		if left := search(node.Left); left {
+			l = 1
+		}
+		if right := search(node.Right); right {
+			r = 1
+		}
+		if node == p || node == q {
+			c = 1
 		}
 
-		if r == p || r == q {
-			self = 1
-		}
-		fmt.Println("::: ", left+self+right)
-		if (left + self + right) >= 2 {
-			ans = r
+		if l+r+c >= 2 {
+			ans = node
 		}
 
-		return (left + self + right) > 0
+		return (l + r + c) > 0
 	}
 
 	search(root)
